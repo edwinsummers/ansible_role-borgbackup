@@ -51,12 +51,15 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    ---
+    - hosts: linux_hosts
+      become: true
+
       tasks:
-      - name: "import role - borgbackup"
-        import_role:
-          name: borgbackup
-        become: true
+        - name: "include role - borgbackup"
+          include_role:
+            name: borgbackup
+          when: borgbackup_skip is not defined
 
 
 Additional Information
