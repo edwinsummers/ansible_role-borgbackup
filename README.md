@@ -43,7 +43,7 @@ The default configuration file, template ```borg_config.j2``` renders to the exe
 Dependencies
 ------------
 
-None
+User/group defined in ```borgbackup_user``` and ```borgbackup_group``` must already exist on target system.
 
 
 Example Playbook

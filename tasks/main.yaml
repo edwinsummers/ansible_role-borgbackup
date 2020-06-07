@@ -3,22 +3,22 @@
   import_tasks: debian.yaml
   when: ansible_facts['os_family']|lower == 'debian'
 
-- name: Create backup group
-  group:
-    name: "{{ borgbackup_group }}"
-    state: present
-
-- name: Create backup user
-  user:
-    name: "{{ borgbackup_user }}"
-    state: present
-    append: true
-    comment: borgbackup account
-    create_home: false
-    group: "{{ borgbackup_group }}"
-    home: "{{ borgbackup_config_dir }}"
-    password_lock: true
-    password: '!'
+# - name: Create backup group
+#   group:
+#     name: "{{ borgbackup_group }}"
+#     state: present
+#
+# - name: Create backup user
+#   user:
+#     name: "{{ borgbackup_user }}"
+#     state: present
+#     append: true
+#     comment: borgbackup account
+#     create_home: false
+#     group: "{{ borgbackup_group }}"
+#     home: "{{ borgbackup_config_dir }}"
+#     password_lock: true
+#     password: '!'
 
 - name: Create borgbackup directories
   file:
