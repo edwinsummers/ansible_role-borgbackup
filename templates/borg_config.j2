@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Variables
+DATE=$(date +"%Y%m%d-%H%M")
+LOGDIR={{ borgbackup_log_dir }}
+BACKUPDIR={{ borgbackup_repo }}/
+PASSFILE={{ borgbackup_config_dir }}/.credentials
+LOGFILE=${LOGDIR}/${DATE}.log
+
+# Preparation
+umask 077
+export BORG_PASSPHRASE=`cat ${PASSFILE}`
+
+# Backup
+
+echo "Backing up files" >> ${LOGFILE}
+{% if borgbackup_exclude_patterns is defined %}
+borg create -sv --compression zlib ${BACKUPDIR}::${DATE} {{ borgbackup_include_paths }} --exclude {{ borgbackup_exclude_patterns }} 2>> ${LOGFILE}
+{% else %}
+borg create -sv --compression zlib ${BACKUPDIR}::${DATE} {{ borgbackup_include_paths }} 2>> ${LOGFILE}
+{% endif %}
+
+# Prune
+
+echo "Pruning archives" >> ${LOGFILE}
+borg prune -sv -d7 -w4 -m12 --show-rc ${BACKUPDIR} 2>> ${LOGFILE}
+
+echo "Backup script completed" >> ${LOGFILE}

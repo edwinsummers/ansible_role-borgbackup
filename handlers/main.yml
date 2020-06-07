@@ -1,0 +1,19 @@
+---
+# handlers file for borgbackup
+- name: borg init
+  shell:
+    chdir: "{{ borgbackup_config_dir }}"
+    cmd: |
+      export BORG_REPO={{ borgbackup_repo }}
+      export BORG_PASSPHRASE={{ borgbackup_passphrase }}
+      borg init -e repokey
+  listen: "initialize repo"
+
+- name: set ownership for repo {{ borgbackup_repo }}
+  file:
+    group: "{{ borgbackup_group }}"
+    owner: "{{ borgbackup_user }}"
+    path: "{{ borgbackup_repo }}"
+    recurse: true
+    state: directory
+  listen: "initialize repo"

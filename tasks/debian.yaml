@@ -1,0 +1,9 @@
+# Tasks for borgbackup - Debian-specific distributions
+---
+- name: Install borgbackup (Debian distributions)
+  apt:
+    name:
+      - borgbackup
+    state: latest
+    update_cache: true
+
