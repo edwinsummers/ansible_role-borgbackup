@@ -53,6 +53,6 @@
   cron:
     state: present
     name: borgbackup
-    user: root
+    user: "{{ borgbackup_user }}"
     job: "{{ borgbackup_config_dir }}/backup-script.sh"
     special_time: daily

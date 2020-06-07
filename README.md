@@ -26,10 +26,10 @@ Role Variables
 - borgbackup_repo: Directory for repo (backup files)
     - Default: /etc/borgbackup/repo/
 
-- borgbackup_passphrase: **Secret** Encryption passphrase for backup files
+- borgbackup_passphrase: **Secret** Encryption passphrase for backup files. *ansible-vault recommended*
     - Default: *none*
 
-- borgbackup_include_paths:
+- borgbackup_include_paths: Space-delimited list of paths to include in repository. (Use folded string '>')
     - Default: /home
 
 - borgbackup_exclude_patterns: PATTERNS to exclude from backup. See ```borg help patterns``` for details.
@@ -52,13 +52,22 @@ Example Playbook
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+      tasks:
+      - name: "import role - borgbackup"
+        import_role:
+          name: borgbackup
+        become: true
+
+
+Additional Information
+----------------------
+
+Consult the [Borgbackup documentation](https://borgbackup.readthedocs.io "ReadtheDocs") for additional information on usage such as include paths, exclude patterns, etc.
 
 License
 -------
 
-BSD
+[MIT](https://choosealicense.com/licenses/mit/)
 
 Author Information
 ------------------
