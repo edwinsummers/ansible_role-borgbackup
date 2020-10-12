@@ -14,9 +14,15 @@ Role Variables
 - borbackup_group: Group for files and directories
     - Default: borgbackup
 
+- borgbackup_gid: Group ID for Borgbackup group
+    - Default: *per OS*
+
 - borgbackup_user: User for files and directories
     - Default: borgbackup
 
+- borgbackup_uid: User ID for Borgbackup user
+    - Default: *per OS*
+    
 - borgbackup_config_dir: Directory for configuration files
     - Default: /etc/borgbackup/
 
@@ -43,7 +49,7 @@ The default configuration file, template ```borg_config.j2``` renders to the exe
 Dependencies
 ------------
 
-User/group defined in ```borgbackup_user``` and ```borgbackup_group``` must already exist on target system.
+None
 
 
 Example Playbook
@@ -59,7 +65,6 @@ Including an example of how to use your role (for instance, with variables passe
         - name: "include role - borgbackup"
           include_role:
             name: borgbackup
-          when: borgbackup_skip is not defined
 
 
 Additional Information
