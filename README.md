@@ -21,7 +21,7 @@ Role Variables
 |borgbackup_log_dir|Directory for borgbackup log files|`/var/log/borgbackup`|no|
 |borgbackup_repo|Directory for backup repository|`/etc/borgbackup/repo/`|no|
 |borgbackup_passphrase|**secret** Encryption passphrase for backup files *ansible-vault recommended*||no|
-|borgbackup_include_paths|Space-delimited list of paths to include in backups (use folded string '>')|`/home`|no|
+|borgbackup_include_paths|Space-delimited list of paths to include in backups (use folded string '>')||yes|
 |borgbackup_exclude_patterns|`PATTERNS` to exclude from backup. See `borg help patterns` for details.||no|
 
 Defaults
