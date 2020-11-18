@@ -1,0 +1,41 @@
+---
+- name: Import Debian tasks
+  import_tasks: debian.yaml
+  when: ansible_facts['os_family']|lower == 'debian'
+
+- name: Create borgbackup directories
+  file:
+    state: directory
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_group }}"
+    mode: 0770
+    path: "{{ item }}"
+  loop:
+    - "{{ borgbackup_config_dir }}"
+    - "{{ borgbackup_log_dir }}"
+    - "{{ borgbackup_repo }}"
+  notify: "initialize repo"
+
+- name: Write credentials file
+  copy:
+    mode: 0400
+    content: "{{ borgbackup_passphrase }}"
+    dest: "{{ borgbackup_config_dir }}/.credentials"
+    group: "{{ borgbackup_group }}"
+    owner: "{{ borgbackup_user }}"
+
+- name: Render backup script template to target
+  template:
+    mode: 0770
+    src: borg_config.j2
+    dest: "{{ borgbackup_config_dir }}/backup-script.sh"
+    group: "{{ borgbackup_group }}"
+    owner: "{{ borgbackup_user }}"
+
+- name: Create cron job for backups
+  cron:
+    state: present
+    name: "borgbackup"
+    user: "{{ borgbackup_user }}"
+    job: "{{ borgbackup_config_dir }}/backup-script.sh"
+    special_time: daily

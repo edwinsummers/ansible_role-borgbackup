@@ -1,0 +1,21 @@
+---
+- name: Import Debian tasks
+  import_tasks: debian.yaml
+  when: ansible_facts['os_family']|lower == 'debian'
+
+- name: Remove cron job for backups
+  cron:
+    state: absent
+    name: "borgbackup"
+    job: "{{ borgbackup_config_dir }}/backup-script.sh"
+
+- name: Remove borgbackup directories
+  file:
+    state: absent
+    path: "{{ item }}"
+  loop:
+    - "{{ borgbackup_config_dir }}"
+    - "{{ borgbackup_log_dir }}"
+    - "{{ borgbackup_repo }}"
+
+

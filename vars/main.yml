@@ -1,8 +1,0 @@
----
-# vars file for borgbackup
-
-borgbackup_user: borgbackup
-borgbackup_group: borgbackup
-borgbackup_config_dir: /etc/borgbackup
-borgbackup_repo: /etc/borgbackup/backups
-borgbackup_log_dir: /var/log/borgbackup

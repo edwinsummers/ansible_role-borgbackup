@@ -6,4 +6,11 @@
       - borgbackup
     state: latest
     update_cache: true
+  when: state == 'present'
 
+- name: Remove borgbackup (Debian distributions)
+  apt:
+    name:
+      - borgbackup
+    state: absent
+  when: state == 'absent'

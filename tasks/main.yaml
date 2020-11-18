@@ -1,60 +1,8 @@
 ---
-- name: Import Debian tasks
-  import_tasks: debian.yaml
-  when: ansible_facts['os_family']|lower == 'debian'
+- name: Import install tasks
+  include_tasks: install.yaml
+  when: state == 'present'
 
-- name: Create backup group
-  group:
-    name: "{{ borgbackup_group }}"
-    gid:  "{{ borgbackup_gid | default(omit) }}"
-    state: present
-
-- name: Create backup user
-  user:
-    name: "{{ borgbackup_user }}"
-    state: present
-    append: true
-    comment: borgbackup account
-    create_home: false
-    group: "{{ borgbackup_group }}"
-    uid: "{{ borgbackup_uid | default(omit) }}"
-    home: "{{ borgbackup_config_dir }}"
-    password_lock: true
-    password: '!'
-
-- name: Create borgbackup directories
-  file:
-    state: directory
-    owner: "{{ borgbackup_user }}"
-    group: "{{ borgbackup_group }}"
-    mode: 0770
-    path: "{{ item }}"
-  loop:
-    - "{{ borgbackup_config_dir }}"
-    - "{{ borgbackup_log_dir }}"
-    - "{{ borgbackup_repo }}"
-  notify: "initialize repo"
-
-- name: Write credentials file
-  copy:
-    mode: 0400
-    content: "{{ borgbackup_passphrase }}"
-    dest: "{{ borgbackup_config_dir }}/.credentials"
-    group: "{{ borgbackup_group }}"
-    owner: "{{ borgbackup_user }}"
-
-- name: Render backup script template to target
-  template:
-    mode: 0660
-    src: borg_config.j2
-    dest: "{{ borgbackup_config_dir }}/backup-script.sh"
-    group: "{{ borgbackup_group }}"
-    owner: "{{ borgbackup_user }}"
-
-- name: Create cron job for backups
-  cron:
-    state: present
-    name: borgbackup
-    user: "{{ borgbackup_user }}"
-    job: "{{ borgbackup_config_dir }}/backup-script.sh"
-    special_time: daily
+- name: Import uninstall tasks
+  import_tasks: uninstall.yaml
+  when: state == 'absent'

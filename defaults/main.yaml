@@ -1,0 +1,9 @@
+---
+# defaults file for borgbackup
+state: "present"
+borgbackup_group: "root"
+borgbackup_user: "root"
+borgbackup_config_dir: "/etc/borgbackup"
+borgbackup_log_dir: "/var/log/borgbackup"
+borgbackup_repo: "/etc/borgbackup/repo"
+borgbackup_include_paths: "/home"
