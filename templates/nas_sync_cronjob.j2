@@ -1,0 +1,1 @@
+mount {{ nas_backup_mountpoint }}; rsync -r {{ borgbackup_repo }} {{ nas_backup_mountpoint }} 2>&1 | logger; umount {{ nas_backup_mountpoint }}

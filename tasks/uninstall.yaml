@@ -19,3 +19,20 @@
     - "{{ borgbackup_repo }}"
 
 
+- name: remove cron job for directory sync
+  ansible.builtin.cron:
+    backup: true
+    name: "sync backup to nas"
+    state: absent
+
+- name: remove mountpoint for nas
+  ansible.builtin.file:
+    path: "{{ nas_backup_mountpoint }}"
+    state: absent
+
+- name: remove nas mount directive
+  ansible.posix.mount:
+    backup: true
+    path: "{{ nas_backup_mountpoint }}"
+    src: "files.ldf.edwinsummers.net:/mnt/generalpool/linux_backups/{{ inventory_hostname }}"
+    state: absent

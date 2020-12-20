@@ -39,3 +39,34 @@
     user: "{{ borgbackup_user }}"
     job: "{{ borgbackup_config_dir }}/backup-script.sh"
     special_time: daily
+
+- name: create mountpoint for nas
+  ansible.builtin.file:
+    group: root
+    mode: 0770
+    owner: root
+    path: "{{ nas_backup_mountpoint }}"
+    state: directory
+
+- name: add nas mount directive
+  ansible.posix.mount:
+    backup: true
+    boot: false
+    dump: 0
+    fstype: nfs
+    opts: "rw,rsize=524288,wsize=524288,hard,proto=tcp,timeo=60,retrans=2,intr"
+    passno: 0
+    path: "{{ nas_backup_mountpoint }}"
+    src: "files.ldf.edwinsummers.net:/mnt/generalpool/linux_backups/{{ inventory_hostname }}"
+    state: present
+
+- name: add cron job for directory sync
+  ansible.builtin.cron:
+    backup: true
+    day: "*"
+    hour: "1"
+    minute: "0"
+    month: "*"
+    job: "{{ lookup('template', './templates/nas_sync_cronjob.j2') }}"
+    name: "sync backup to nas"
+    state: present
